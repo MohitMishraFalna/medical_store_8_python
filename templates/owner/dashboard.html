@@ -1,0 +1,972 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} All List {% endblock title %}
+{% block sub_title %} All List {% endblock sub_title %}
+{% block content %}
+<section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="message-box-hide">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                  <p class="text-center text-{{message.tags}}">{{message}}</p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            {% endif %}            
+          </div>
+
+          <!-- Product Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4">
+            <a href="#all-product">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <h5 class="card-title">Product <span>| Total</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-truck"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ products.total_product }}</h6>
+                      <span class="text-success small pt-1 fw-bold">{{ products.product_active }}</span> <span class="text-muted small pt-2 ps-1">Active</span>
+                      <span class="text-danger small pt-1 fw-bold">{{ products.product_deactive }}</span> <span class="text-muted small pt-2 ps-1">Pending</span>
+    
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </a>
+          </div><!-- End Product Card -->
+
+          <!-- Revenue Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4" >
+            <a href="#all-orders">
+              <div class="card info-card revenue-card">
+                <div class="card-body">
+                  <h5 class="card-title">Revenue <span>| This Month</span></h5>  
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ orders.total_order }}</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->  
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            </a>
+           
+          </div><!-- End Revenue Card -->
+
+          <!-- Customers Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4">
+            <a href="#all-customers">
+              <div class="card info-card customers-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Customers <span>| This Year</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ customers.total_customer }}</h6>
+                      <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div><!-- End Customers Card -->
+
+          <!-- Staff Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4">
+            <a href="#all-staff">
+
+              <div class="card info-card sales-card">
+  
+                <div class="card-body">
+                  <h5 class="card-title">Staff <span>| This Year</span></h5>
+  
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-4">
+                      <h6>{{ staffs.total_staff }}</h6>
+                      <span class="text-warning small pt-1 fw-bold">{{ staffs.staff_pending }}</span> <span class="text-muted small pt-2 ps-1">Pending</span>
+                      <span class="text-success small pt-1 fw-bold">{{ staffs.staff_active }}</span> <span class="text-muted small pt-2 ps-1">Active</span>
+                      <p><span class="text-danger small pt-1 fw-bold">{{ staffs.staff_deactive }}</span> <span class="text-muted small pt-2 ps-1">Deactive</span></p>
+  
+                    </div>
+                  </div>
+  
+                </div>
+              </div>  
+            </a>
+          </div>
+          <!-- End Staff Card -->
+
+          <!-- Department Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4">
+            <a href="#all-department">
+
+              <div class="card info-card revenue-card">
+  
+                <div class="card-body">
+                  <h5 class="card-title">Department <span>| This Year</span></h5>
+  
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-menu-button-wide"></i>
+                    </div>
+                    <div class="ps-4">
+                      <h6>{{ departments.total_department }}</h6>
+                      <span class="text-success small pt-1 fw-bold">{{ departments.department_active }}</span> <span class="text-muted small pt-2 ps-1">Active</span>
+                      <p><span class="text-danger small pt-1 fw-bold">{{ departments.department_deactive }}</span> <span class="text-muted small pt-2 ps-1">Deactive</span></p>
+  
+                    </div>
+                  </div>
+  
+                </div>
+              </div>  
+            </a>
+          </div>
+          <!-- End Department Card -->
+
+          <!-- Doctor Card -->
+          <div class="col-xxl-4 col-xl-4 col-md-4">
+            <a href="#all-doctor">
+
+              <div class="card info-card customers-card">
+  
+                <div class="card-body">
+                  <h5 class="card-title">Doctor <span>| This Year</span></h5>
+  
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-calendar-plus"></i>
+                    </div>
+                    <div class="ps-4">
+                      <h6>{{ doctors.total_doctor }}</h6>
+                      <span class="text-success small pt-1 fw-bold">{{ doctors.doctor_active }}</span> <span class="text-muted small pt-2 ps-1">Active</span>
+                      <p><span class="text-danger small pt-1 fw-bold">{{ doctors.doctor_deactive }}</span> <span class="text-muted small pt-2 ps-1">Deactive</span></p>  
+                    </div>
+                  </div>  
+                </div>
+              </div>  
+            </a>
+          </div>
+          <!-- End Doctor Card -->
+
+          <!-- Recent Sales -->
+          <div class="col-xxl-4 col-xl-12" id="recent-sales">
+            <div class="card recent-sales" id="all-orders">
+              <div class="card-body">
+                <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+                <table class="table table-borderless datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Customer</th>
+                      <th scope="col">Bill Amount</th>
+                      <th scope="col">GST</th>
+                      <th scope="col">Total Amount</th>
+                      <th scope="col">Payable Amount</th>
+                      <th scope="col">Due Amount</th>
+                      <th scope="col">Paid Amount</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if orders.orders.all_order %}
+                      {% for order in orders.orders.all_order %}
+                        <tr>
+                          <td scope="row"><b>{{ order.id }}</b></td>
+                          <td class="text-primary fw-bold orderProduct" style="cursor:pointer"  data-bs-toggle="modal" data-bs-target="#ExtralargeModal">{{ order.customer.name }}</td>
+                          <td>{{ order.bill_amt }}</td>
+                          <td>{{ order.gst }}</td>
+                          <td>{{ order.total_amt }}</td>
+                          <td>{{ order.payable_amt }}</td>
+                          <td>{{ order.due_amt }}</td>
+                          <td>{{ order.paid_amt }}</td>
+                            
+                          {% if order.payment_status == 'success' %}
+                            <td><span class="badge bg-success">Active</span></td>
+                          {% else %}
+                            <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                          {% endif %}
+                         
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+                  <!-- Disabled and active states and Pagination -->
+                  <nav aria-label="...">
+                    <!-- Pagination logic -->
+                    <ul class="pagination">
+                      {% if orders.orders.all_order.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link" href="/owner/dashboard/?page={{ orders.orders.all_order.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                      {% endif %}
+                      
+                      {% for n in orders.orders.totalPageList %}
+                        <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                      {% endfor %}
+
+                      {% if orders.orders.all_order.has_next %}
+                        <li class="page-item">
+                          <a class="page-link" href="/owner/dashboard/?page={{ orders.orders.all_order.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link" href="/owner/dashboard/?page={{ orders.orders.totalPages }}">Last</a>
+                        </li>
+                      {% endif %}
+
+                    </ul>
+                  </nav><!-- End Disabled and active states -->
+              </div>
+
+            </div>
+          </div><!-- End Recent Sales -->
+
+          <!-- Top Product -->
+          <div class="col-12" id="all-product">
+            <div class="card top-selling">
+              <div class="filter">
+                <label style="margin-right: 15px;">
+                  <!-- Per page entry -->
+                  <form method="get" id="doctorPerPage" class="productPerPage">
+                    <select class="dataTable-selector productSelectPerPage" id="productSelectPerPage" name="productSelectPerPage">
+                      <option>Click</option>
+                      <option value="1">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select> {{ products.products.productSelectPerPage }} entries per page
+                  </form>
+                </label>
+              </div>
+              <div class="card-body pb-0">
+                <h5 class="card-title">Product <span>| List</span>
+                  <div class="input-group has-validation">
+                    <input type="text" name="productInput" class="" id="productInput">
+                    <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+                  </div>
+                </h5>
+
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">#Id</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Manufacturing</th>
+                      <th scope="col">Expiry</th>
+                      <th scope="col">Department</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id='productTable'>
+                    <tr>
+                      {% if products.products.all_product %}
+                        {% for product in products.products.all_product %}
+                          <tr>
+                            <td scope="row"><b>{{ product.id }}</b></td>
+                            <td class="text-primary fw-bold">{{ product.name }}</td>
+                            <td>{{ product.amt }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.manufacturing }}</td>
+                            <td>{{ product.expiry }}</td>
+                            <td>{{ product.department }}</td>
+                              
+                            {% if product.deleted_at == 1 %}
+                              <td><span class="badge bg-success">Active</span></td>
+                            {% else %}
+                              <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                            {% endif %}
+                            <td>
+                              <a href="{% url 'product_edit' %}?id={{product.id}}" class="badge bg-warning"><i class="bi bi-pen"></i></a>
+                              <a href="{% url 'product_delete' %}?id={{product.id}}" class="badge bg-danger"><i class="bi bi-trash"></i></a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      {% endif %}
+                      
+                    </tr>                    
+                  </tbody>
+                </table>                   
+                <!-- Disabled and active states and Pagination -->
+                <nav aria-label="...">
+                  <!-- Pagination logic -->
+                  <ul class="pagination">
+                    {% if products.products.all_product.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ products.products.all_product.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                      </li>
+                    {% endif %}
+                    
+                    {% for n in products.products.totalPageList %}
+                      <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                    {% endfor %}
+
+                    {% if products.products.all_product.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ products.products.all_product.next_page_number }}">Next</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ products.products.totalPages }}">Last</a>
+                      </li>
+                    {% endif %}
+
+                  </ul>
+                </nav><!-- End Disabled and active states -->
+              </div>
+            </div>
+          </div><!-- End Top Product -->
+
+          <!-- Top Staff List -->
+          <div class="col-12" id="all-staff">
+            <div class="card top-selling">
+              <div class="filter">
+                <label style="margin-right: 15px;">
+                  <!-- Per page entry -->
+                  <form method="get" id="staffPerPage" class="staffPerPage">
+                    <select class="dataTable-selector staffTableSelector" id="staffTableSelector" name="staffTableSelector">
+                      <option>Click</option>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select> {{ staffs.staffs.staffPerPage }} entries per page
+                  </form>
+                </label>
+              </div>
+
+              <div class="card-body pb-0">
+                <h5 class="card-title">All Staff
+                    <div class="input-group has-validation">
+                      <input type="text" name="search_Item" class="" id="search_Item">
+                      <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+                    </div>
+                    </h5>
+                    <div class="horzontal-scroll">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id='searchData'>
+                          {% if staffs.staffs.all_staff %}
+                            {% for staff in staffs.staffs.all_staff %}
+                              <tr>
+                                <td scope="row"><b>{{ staff.id }}</b></td>
+                                <td>{{ staff.first_name }}</td>
+                                <td>{{ staff.email }}</td>
+                                <td>{{ staff.username }}</td>
+                                <td>{{ staff.mobile }}</td>
+                                <td>{{ staff.user_role }}</td>
+                                {% if staff.pwd_reset == 0 and staff.login_attempt == 5 %}
+                                  <td><a href="/owner/new_password/?eml={{staff.email}}&username={{staff.username}}" class="badge bg-danger">Generate</a></td>
+                                {% else %}
+                                  <td><span class="badge bg-success">Password</span></td>                            
+                                {% endif %}
+  
+                                {% if staff.pwd_reset == 0 and staff.deleted_at == 1 %}
+                                  <td><span class="badge bg-warning">Inactive</span></td>
+                                {% elif staff.pwd_reset == 1 and staff.deleted_at == 1%}
+                                  <td><span class="badge bg-success">Active</span></td>                            
+                                {% elif staff.deleted_at == 0 %}
+                                  <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                                {% endif %}
+                                <td><a href="/owner/staff_delete/?dep_id={{staff.id}}" class="badge bg-danger"><i class="bi bi-trash"></i></a></td>                                                                                  
+                              </tr>
+                            {% endfor %}
+                          {% endif %}
+                        </tbody>
+                        <!-- <tbody id='searchData' style="display: none;">
+  
+                        </tbody>                    -->
+                      </table>
+                    </div>
+                    
+                  <!-- Disabled and active states and Pagination -->
+                <nav aria-label="...">
+                  <!-- Pagination logic -->
+                  <ul class="pagination">
+                    {% if staffs.staffs.all_staff.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ staffs.staffs.all_staff.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                      </li>
+                    {% endif %}
+                    
+                    {% for n in staffs.staffs.totalPageList %}
+                      <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                    {% endfor %}
+
+                    {% if staffs.staffs.all_staff.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ staffs.staffs.all_staff.next_page_number }}">Next</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ staffs.staffs.totalPages }}">Last</a>
+                      </li>
+                    {% endif %}
+
+                  </ul>
+                </nav><!-- End Disabled and active states -->
+              </div>
+              
+            </div>
+          </div><!-- End Top Staff List -->
+
+           <!-- Top Deparment List -->
+          <div class="col-12" id="all-department">
+            <div class="card top-selling">
+              <div class="filter">
+                <label style="margin-right: 15px;">
+                  <!-- Per page entry -->
+                  <form method="get" id="departmentPerPage" class="departmentPerPage">
+                    <select class="dataTable-selector departmentTableSelector" id="departmentTableSelector" name="departmetnSelectPerPage">
+                      <option>Click</option>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select> {{ departments.departments.departmetnSelectPerPage }} entries per page
+                  </form>
+                </label>
+              </div>
+
+              <div class="card-body pb-0">
+                <h5 class="card-title">All department
+                    <div class="input-group has-validation">
+                      <input type="text" name="myInput" class="" id="myDepartmentInput">
+                      <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+                    </div>
+                    </h5>
+                    <div class="horzontal-scroll">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id='myDepartmentTable'>
+                          {% if departments.departments.all_department %}
+                            {% for department in departments.departments.all_department %}
+                              <tr>
+                                <td scope="row"><b>{{ department.id }}</b></td>
+                                <td>{{ department.name }}</td>
+                                  
+                                {% if department.deleted_at == 1 %}
+                                  <td><span class="badge bg-success">Active</span></td>
+                                {% else %}
+                                  <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                                {% endif %}
+                                <td>
+                                  <a href="/owner/department_edit/?dep_id={{department.id}}" class="badge bg-warning"><i class="bi bi-pen"></i></a>
+                                  <a href="/owner/department_delete/?dep_id={{department.id}}" class="badge bg-danger"><i class="bi bi-trash"></i></a>
+                                </td>
+                              </tr>
+                            {% endfor %}
+                          {% endif %}
+                        </tbody>                       
+                      </table>
+                    </div>
+                    
+                  <!-- Disabled and active states and Pagination -->
+                <nav aria-label="...">
+                  <!-- Pagination logic -->
+                  <ul class="pagination">
+                    {% if departments.departments.all_department.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ departments.departments.all_department.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                      </li>
+                    {% endif %}
+                    
+                    {% for n in departments.departments.totalPageList %}
+                      <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                    {% endfor %}
+
+                    {% if departments.departments.all_department.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ departments.departments.all_department.next_page_number }}">Next</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ departments.departments.totalPages }}">Last</a>
+                      </li>
+                    {% endif %}
+
+                  </ul>
+                </nav><!-- End Disabled and active states -->
+              </div>
+              
+            </div>
+          </div><!-- End Top Department List -->
+
+          <!-- Top Doctor List -->
+          <div class="col-12" id="all-doctor">
+            <div class="card top-selling">
+              <div class="filter">
+                <label style="margin-right: 15px;">
+                  <!-- Per page entry -->
+                  <form method="get" id="doctorPerPage" class="doctorPerPage">
+                    <select class="dataTable-selector doctorTableSelector" id="doctorTableSelector" name="doctorSelectPerPage">
+                      <option>Click</option>
+                      <option value="1">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select> {{ doctors.doctors.doctorSelectPerPage }} entries per page
+                  </form>
+                </label>
+              </div>
+
+              <div class="card-body pb-0">
+                <h5 class="card-title">All Doctor
+                <div class="input-group has-validation">
+                  <input type="text" name="myInput" class="" id="myDoctorInput">
+                  <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+                </div>
+                </h5>
+                <div class="horzontal-scroll">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id='myDoctorTable'>
+                      {% if doctors.doctors.all_doctor %}
+                        {% for doctor in doctors.doctors.all_doctor %}
+                          <tr>
+                            <td scope="row"><b>{{ doctor.id }}</b></td>
+                            <td>{{ doctor.name }}</td>
+                            <td>{{ doctor.email }}</td>
+                            <td>{{ doctor.mobile }}</td>
+                            <td>{{ doctor.department }}</td>
+                              
+                            {% if doctor.deleted_at == 1 %}
+                              <td><span class="badge bg-success">Active</span></td>
+                            {% else %}
+                              <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                            {% endif %}
+                            <td>
+                              <a href="/owner/doctor_edit/?id={{doctor.id}}" class="badge bg-warning"><i class="bi bi-pen"></i></a>
+                              <a href="/owner/doctor_delete/?id={{doctor.id}}" class="badge bg-danger"><i class="bi bi-trash"></i></a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                    
+                <!-- Disabled and active states and Pagination -->
+                <nav aria-label="...">
+                  <!-- Pagination logic -->
+                  <ul class="pagination">
+                    {% if doctors.doctors.all_doctor.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ doctors.doctors.all_doctor.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                      </li>
+                    {% endif %}
+                    
+                    {% for n in doctors.doctors.totalPageList %}
+                      <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                    {% endfor %}
+
+                    {% if doctors.doctors.all_doctor.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ doctors.doctors.all_doctor.next_page_number }}">Next</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ doctors.doctors.totalPages }}">Last</a>
+                      </li>
+                    {% endif %}
+
+                  </ul>
+                </nav><!-- End Disabled and active states -->
+              </div>
+              
+            </div>
+          </div><!-- End Top Doctor List -->
+          
+          <!-- Top Customer List -->
+          <div class="col-12" id="all-customers">
+            <div class="card top-selling">
+              <div class="filter">
+                <label style="margin-right: 15px;">
+                  <!-- Per page entry -->
+                  <form method="get" id="customerPerPage" class="customerPerPage">
+                    <select class="dataTable-selector customerSelectPerPage" id="customerSelectPerPage" name="customerSelectPerPage">
+                      <option>Click</option>
+                      <option value="1">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select> {{ customers.customers.customerSelectPerPage }} entries per page
+                  </form>
+                </label>
+              </div>
+
+              <div class="card-body pb-0">
+                <h5 class="card-title">All Customer
+                <div class="input-group has-validation">
+                  <input type="text" name="myInput" class="" id="mycustomerInput">
+                  <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+                </div>
+                </h5>
+                <div class="horzontal-scroll">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                      </tr>
+                    </thead>
+                    <tbody id='mycustomerTable'>
+                      {% if customers.customers.all_customer %}
+                        {% for customer in customers.customers.all_customer %}
+                          <tr>
+                            <td scope="row"><b>{{ customer.id }}</b></td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.mobile }}</td>
+                            <td>{{ customer. }}</td>
+                          </tr>
+                        {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                    
+                <!-- Disabled and active states and Pagination -->
+                <nav aria-label="...">
+                  <!-- Pagination logic -->
+                  <ul class="pagination">
+                    {% if customers.customers.all_customer.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ customers.customers.all_customer.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                      </li>
+                    {% endif %}
+                    
+                    {% for n in customers.customers.totalPageList %}
+                      <li class="page-item"><a class="page-link" href="/owner/dashboard/?page={{n}}">{{n}}</a></li>
+                    {% endfor %}
+
+                    {% if customers.customers.all_customer.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ customers.customers.all_customer.next_page_number }}">Next</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="/owner/dashboard/?page={{ customers.customers.totalPages }}">Last</a>
+                      </li>
+                    {% endif %}
+
+                  </ul>
+                </nav><!-- End Disabled and active states -->
+              </div>
+              
+            </div>
+          </div><!-- End Top customer List -->
+          
+          <!-- Modal for invoice print -->
+          <div class="modal fade" id="ExtralargeModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Customer Invoice</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <!-- Order and customer details -->
+                  <div id="invoice">
+
+                    <div class="toolbar hidden-print">
+                        <div class="text-right">
+                            <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
+                            <button class="btn btn-info"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="invoice overflow-auto">
+                        <div style="min-width: 600px">
+                            <header>
+                                <div class="row">
+                                    <div class="col">
+                                      <img src="{% static 'assets/img/logo.png' %}" data-holder-rendered="true" />                                            
+                                    </div>
+                                    <div class="col company-details">
+                                        <h2 class="name">
+                                          Mohit Mishra
+                                        </h2>
+                                        <div>455 Foggy Heights, AZ 85004, US</div>
+                                        <div>8690716407</div>
+                                        <div>mohitmishra.falna850@gmail.com</div>
+                                    </div>
+                                </div>
+                            </header>
+                            <main>
+                                <div class="row contacts">
+                                    <div class="col invoice-to">
+                                        <div class="text-gray-light">INVOICE TO:</div>
+                                        <h2 class="customerName"></h2>
+                                        <div><span class="text-gray-light header-label">Mobile:</span><span class="mobileNo"></span></div>
+                                        <div><span class="text-gray-light header-label">Doctor:</span><span class="doctor"></span></div>
+                                        <div><span class="text-gray-light header-label">Department:</span><span class="department"></span></div>
+                                    </div>
+                                    <div class="col invoice-details">
+                                        <h1 class="invoice-id"></h1>
+                                        <div class="date order_date"></div>
+                                        <div class="text-danger">ALL AMOUNT IN INDIAN CURRENCY</div>
+                                    </div>
+                                </div>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th class="text-left">Product Name</th>
+                                          <th class="text-right">Price</th>
+                                          <th class="text-right">Quantity</th>
+                                          <th class="text-right">TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dynamic_data">
+                                       
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">SUBTOTAL</td>
+                                          <i class="bi bi-currency-inr"><td class="bill_amt"></td></i>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">TAX 18%</td>
+                                          <td class="bill_gst"></td>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">INVOICE TOTAL</td>
+                                          <td class="bill_total"></td>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">OUTSTANDING AMOUNT</td>
+                                          <td class="due_amt1"></td>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">GRAND TOTAL</td>
+                                          <td class="payable_amt1"></td>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"></td>
+                                          <td colspan="2">PAID</td>
+                                          <td class="paid_amt1"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="thanks">Thank you!</div>
+                                <div class="notices">
+                                    <div>REQUEST:</div>
+                                    <div class="notice">If you feel good for purchasing with us so please visite again.</div>
+                                </div>
+                            </main>
+                            <footer>
+                                Invoice was created on a computer and is valid without the signature and seal.
+                            </footer>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Modal for invoice print -->
+        </div>
+      </div><!-- End Left side columns -->
+    </div>
+</section>
+{% endblock content %}
+
+{% block javascript %}
+  <script>
+    $(document).ready(() => {
+      // Auto form submit
+      $('.staffTableSelector').on('change', ()=>{
+        $('.staffPerPage').submit()
+      })
+
+      $('.departmentTableSelector').on('change', ()=>{
+        $('.departmentPerPage').submit()
+      })
+      
+      $('.doctorTableSelector').on('change', ()=>{
+        $('.doctorPerPage').submit()
+      })
+      
+      $('.productSelectPerPage').on('change', ()=>{
+        $('.productPerPage').submit()
+      })
+      
+      $('.customerSelectPerPage').on('change', ()=>{
+        $('.customerPerPage').submit()
+      })
+
+      // Search from database.
+      $('#search_Item').keyup(()=>{
+        $.ajax({
+          type:"GET",
+          url:'/owner/staff_search',
+          data:{'search_Item':$('#search_Item').val()},
+          success:(data)=>{
+            let result = JSON.parse(data)
+            if (result.response) {
+              $('#searchData').html('')
+              
+              for(let i = 0; i<result.response.length; i++){
+                let srcData = `<tr><td scope="row"><b> ${result.response[i].id}</b></td>
+                  <td> ${result.response[i].first_name}</td>
+                  <td> ${result.response[i].email}</td>
+                  <td> ${result.response[i].username}</td>
+                  <td> ${result.response[i].mobile}</td>
+                  <td> ${result.response[i].user_role}</td>
+
+                  ${(result.response[i].pwd_reset == 0 && result.response[i].login_attempt == 5) ? 
+                    `<td><a href="${ '/owner/new_password/' + result.response[i].email + '/' + result.response[i].username  }" class="badge bg-danger">Generate</a></td>` :
+                    '<td><span class="badge bg-success">Password</span></td>'
+                  }
+
+                  ${(result.response[i].pwd_reset == 0 && result.response[i].deleted_at == 1) ?
+                   '<td><span class="badge bg-warning">Inactive</span></td>' : ' '}
+                  
+                  ${( result.response[i].pwd_reset == 1 && result.response[i].deleted_at == 1) ?
+                    '<td><span class="badge bg-success">Active</span></td>' : ''
+                  }
+                  
+                  ${(result.response[i].deleted_at == 0) ?
+                    '<td><span class="badge bg-danger">Deactivate</span></td>' : ''
+                  }
+                  
+                  <td><a href="${ '/owner/staff_delete/' + result.response[i].email }" class="badge bg-danger"><i class="bi bi-trash"></i></a></td> </tr>`
+                $('#searchData').append(srcData)
+              }
+            }
+          }
+        })
+      })
+
+      // Saearching
+      $("#myDepartmentInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        console.log(value);
+        $("#myDepartmentTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+      
+      $("#myDoctorInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myDoctorTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+      
+      $("#productInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#productTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+      
+      $("#mycustomerInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#mycustomerTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+       // Print bill for particular order.
+       $('.orderProduct').click(function(){
+        $.ajax({
+          type:"GET",
+          url:'/owner/order_product_table/',
+          data:{'my_order_id':$(this).prev('td').text()},
+          success:(data)=>{
+            let result = JSON.parse(data)
+            $('.customerName').text(result.response[0].name)
+            $('.mobileNo').text(result.response[0].mobile)
+            $('.doctor').text(result.response[0].doctor)
+            $('.department').text(result.response[0].department)
+            $('.invoice-id').text('INVOICE 1995 -' + result.response[0].id)
+            $('.order_date').text(result.response[0].order_date)
+            $('.bill_amt').text(result.response[0].bill_amt)
+            $('.bill_gst').text(result.response[0].gst)
+            $('.bill_total').text(result.response[0].total_amt)
+            $('.due_amt1').text(result.response[0].due_amt)
+            $('.payable_amt1').text(result.response[0].payable_amt)
+            $('.paid_amt1').text(result.response[0].paid_amt)
+
+            if (result.response) {
+              $('#orderProduct').html('')
+              // create Bill here.
+              let count = 1
+              for(let i = 0; i<result.response.length; i++){
+                let srcData = '<tr>'
+                  srcData = srcData + '<td class="no">'+ count + '</td>'
+                  srcData = srcData + '<td class="text-left">'+ result.response[i].prod_name + '</td>'
+                  srcData = srcData + '<td class="unit">'+ result.response[i].prod_amt + '</td>'
+                  srcData = srcData + '<td class="qty">'+ result.response[i].qty + '</td>'
+                  srcData = srcData + '<td class="total">'+ ( result.response[i].prod_amt * result.response[i].qty ) + '</td>'
+                  srcData = srcData + '</tr>'
+                  count++
+                $('#dynamic_data').append(srcData)
+              }
+            }
+          }
+        })
+      })
+    })
+  </script>
+{% endblock javascript %}

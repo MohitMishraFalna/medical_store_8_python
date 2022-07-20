@@ -1,0 +1,61 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} New Doctor {% endblock title %}
+{% block sub_title %} New Doctor {% endblock sub_title %}
+{% block content %}
+
+<!-- Edit doctor -->
+<div class="card mb-3">
+    <!-- Edit doctor -->
+    <div class="card-body">
+      <div class="pt-4 pb-2">
+        <h5 class="card-title text-center pb-0 fs-4">Edit Doctor</h5>
+        <p class="text-center small">Change Doctor details</p>
+      </div>
+
+      <form class="row g-3 " action="/owner/doctor_update/" method="POST" novalidate>
+        <!-- <form class="row g-3 needs-validation" novalidate method="POST" action=""> -->
+          {% csrf_token %}
+          <input type="hidden" name="hid_id" value="{{id}}">
+          <div class="col-3">
+            <label for="yourName" class="form-label">Name</label>
+            {{ edit_form.name }}
+            <div class="invalid-feedback">Please, enter your name!</div>
+            {{ edit_form.name.errors}}
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Email</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">@</span>
+              {{ edit_form.email }}
+              <div class="invalid-feedback">Please choose a email.</div>
+              {{ edit_form.email.errors }}
+            </div>
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Mobile</label>
+            <div class="input-group has-validation">
+              {{ edit_form.mobile }}
+              <div class="invalid-feedback">Please choose a role.</div>
+              {{ edit_form.mobile.errors }}
+            </div>
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Department</label>
+            <div class="input-group has-validation">
+              {{ edit_form.department }}
+              <div class="invalid-feedback">Please choose a department.</div>
+              {{ edit_form.department.errors }}
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">Create Doctor</button>
+          </div>
+        </form>
+
+    </div>
+  </div><!-- Edit doctor -->
+{% endblock content %}

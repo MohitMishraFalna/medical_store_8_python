@@ -1,0 +1,74 @@
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      {% if request.session.role == 'Owner' %}
+        <li class="nav-item">
+          
+          <a class="nav-link " href="{% url 'dashboard' %}">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+          </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">        
+          <a class="nav-link " href="{% url 'register' %}">
+            <i class="bi bi-card-list"></i>
+            <span>Staff Register</span>
+          </a>
+        </li><!-- End register Nav -->
+      {% endif %}
+      <li class="nav-item">
+        
+        <a class="nav-link " href="{% url 'workbench' %}">
+          <i class="bi bi-wrench"></i>
+          <span>Workbench</span>
+        </a>
+      </li><!-- End workbench Nav -->
+
+      <!-- Department -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Department-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Department</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Department-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'new_department' %}">
+              <i class="bi bi-circle"></i><span>Add</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Department Nav -->
+
+      <!-- Doctor -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Doctor-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-plus"></i><span>Doctor</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Doctor-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'doctor_add' %}">
+              <i class="bi bi-circle"></i><span>Add</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Doctor Nav -->
+
+      <!-- Product -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Product-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-truck"></i><span>Product</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Product-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'new_product' %}">
+              <i class="bi bi-circle"></i><span>Add</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Product Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

@@ -1,0 +1,277 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} New Product {% endblock title %}
+{% block sub_title %} New Product {% endblock sub_title %}
+{% block content %}
+
+  <!-- Add product -->
+  <div class="card mb-3">
+    <!-- Add product -->
+    <div class="card-body">
+      <div class="pt-4 pb-2">
+        <h5 class="card-title text-center pb-0 fs-4">Add New Product</h5>
+        <p class="text-center small">Enter product details to create new</p>
+      </div>
+
+      <form class="row g-3 " action="" method="POST" novalidate>
+        <!-- <form class="row g-3 needs-validation" novalidate method="POST" action=""> -->
+          {% csrf_token %}
+          <div class="col-4">
+            <label for="yourName" class="form-label">Name</label>
+            {{ add_form.name }}
+            <div class="invalid-feedback">Please, enter your name!</div>
+            {{ add_form.name.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="youramount" class="form-label">Amount</label>
+            {{ add_form.amount }}
+            <div class="invalid-feedback">Please, enter your amount!</div>
+            {{ add_form.amount.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="yourQty" class="form-label">Qty</label>
+            {{ add_form.quantity }}
+            <div class="invalid-feedback">Please, enter your Qty!</div>
+            {{ add_form.quantity.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="yourproduct_mfg" class="form-label">Product Mfg</label>
+            <div class="input-group has-validation">
+              {{ add_form.manufacturing }}
+              <div class="invalid-feedback">Please choose a Manufacturing.</div>
+              {{ add_form.manufacturing.errors }}
+            </div>
+          </div>
+
+          <div class="col-4">
+            <label for="yourproduct_exp" class="form-label">Product Exp</label>
+            <div class="input-group has-validation">
+              {{ add_form.expiry }}
+              <div class="invalid-feedback">Please choose a expiry.</div>
+              {{ add_form.expiry.errors }}
+            </div>
+          </div>
+
+          <div class="col-4">
+            <label for="yourEmail" class="form-label">Department</label>
+            <div class="input-group has-validation">
+              {{ add_form.department }}
+              <div class="invalid-feedback">Please choose a department.</div>
+              {{ add_form.department.errors }}
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">Create product</button>
+          </div>
+        </form>
+
+    </div>
+  </div><!-- Add product -->
+      
+  <!-- product List -->
+  <div class="col-12" id="all-product">
+    <div class="card top-selling">
+      <div class="card-body pb-0">
+
+        <h5 class="card-title">All product
+          <div class="input-group has-validation">
+            <input type="text" name="search_Item" class="" id="search_Item" placeholder="Search you want">
+            <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+          </div>
+        </h5>
+        <div class="filter">
+          <label style="margin-right: 15px;">
+            <!-- Per page entry -->
+            <form method="get" id="frmPerPage">
+              <select class="dataTable-selector" id="dataTableSelector" name="selectPerPage">
+                <option>Click</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+              </select> {{perPage}} entries per page
+            </form>
+          </label>
+        </div>
+
+        <div class="horzontal-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Expiry</th>
+                <th scope="col">Mfg</th>
+                <th scope="col">Department</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id='searchData'>
+              {% if products %}
+                {% for product in products %}
+                  <tr>
+                    <td scope="row"><b>{{ product.id }}</b></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.amt }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.expiry }}</td>
+                    <td>{{ product.manufacturing }}</td>
+                    <td>{{ product.department }}</td>
+                    {% if product.deleted_at == True %}
+                      <td><span class="badge bg-success">Active</span></td>                            
+                    {% else %}
+                      <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                    {% endif %}                    
+                    <td>
+                      <a class="badge bg-warning edit" id="{{ product.id }}"><i class="bi bi-pen"></i></a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>          
+        <!-- Disabled and active states and Pagination -->
+        <nav aria-label="...">
+          <!-- Pagination logic -->
+          <ul class="pagination">
+            {% if products.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="/product/add/?page={{ products.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+              </li>
+            {% endif %}
+            
+            {% for n in totalPageList %}
+              <li class="page-item"><a class="page-link" href="/product/add/?page={{n}}">{{n}}</a></li>
+            {% endfor %}
+
+            {% if products.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="/product/add/?page={{ products.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="/product/add/?page={{ totalPages }}">Last</a>
+              </li>
+            {% endif %}
+
+          </ul>
+        </nav><!-- End Disabled and active states -->
+      </div>    
+    </div>
+  </div><!-- End product List -->
+
+  <!-- Modal for edit product -->
+  <div class="modal fade" id="verticalycentered" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"> Edit Form
+            <span>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete Deparment" class="btn btn-sm btn-danger" id="delete"><i class="bi bi-trash"></i></a>
+            </span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="row g-3" action="{% url 'edit_product' %}" method="POST">
+            {% csrf_token %}
+            <div class="col-md-12" id="editForm">
+
+            </div>            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>    
+          </form><!-- End No Labels Form -->
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- End Modal for edit product -->
+
+{% endblock content %}
+{% block javascript %}
+<script>
+  // all jquery working
+  $(document).ready(function() {
+    // auto form submit
+    $('#dataTableSelector').change(()=>{
+      $('#frmPerPage').submit();
+    })
+
+    // Edit product Modal 
+    $(document).on('click', '.edit', function() {
+      // Get data and receive django forms as response
+      $.ajax({
+        url: '/product/get_product_Data/',
+        type: 'GET',
+        data : {'doc_id': $(this).attr('id')},
+        success:(data)=>{
+          if(data){
+            // open modal
+            $('#verticalycentered').modal('show'); 
+            
+            // Django forms get using ajax
+            $('#editForm').html(data)
+          }
+        }
+      })
+      
+      // Assign href with id in delete anchor tag      
+      $('#delete').attr('href', "/product/delete/?d_id=" + $(this).attr('id')) 
+    })
+
+    // Warning before delete item
+    $('#delete').click(function() {
+      confirm('Are you sure delete item? ')
+    })
+
+    // Search from database.
+    $('#search_Item').keyup(()=>{
+      $.ajax({
+        type:"GET",
+        url:'/product/product_search',
+        data:{'search_Item':$('#search_Item').val()},
+        success:(data)=>{
+          if (data) {
+            let result = JSON.parse(data)
+            $('#searchData').html('')
+
+            for(let i = 0; i<result.response.length; i++){
+              let srcData = `<tr><td scope="row"><b> ${result.response[i].id}</b></td>
+                <td scope="row">${result.response[i].name}</td>
+                <td scope="row">${result.response[i].amt}</td>
+                <td scope="row">${result.response[i].quantity}</td>
+                <td scope="row">${result.response[i].expiry}</td>
+                <td scope="row">${result.response[i].manufacturing}</td>
+                <td scope="row">${result.response[i].department}</td>
+                ${(result.response[i].deleted_at == 1) ?
+                  '<td><span class="badge bg-success">Active</span></td>' : 
+                  '<td><span class="badge bg-danger">Deactivate</span></td>'
+                }
+                
+                <td><a class="badge bg-warning edit" id="${result.response[i].id}"><i class="bi bi-pen"></i></a></td></tr>`
+              $('#searchData').append(srcData)
+            }
+          }else{
+            // for success - green box
+            toastr.error('No data found', 'Data not found');
+          }
+        }
+      })
+    })
+    
+  })
+</script>
+{% endblock javascript %}
+

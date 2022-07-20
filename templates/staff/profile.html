@@ -1,0 +1,245 @@
+{% extends 'layout/base.html'%}
+{% load static %}
+{% block title %} User Profile {% endblock title %}
+{% block sub_title %} Profile View / Edit{% endblock sub_title %}
+{% block content %}
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                        <img src="{{ userData.profile_img.url }}" alt="Profile" class="rounded-circle">
+                        <h2>{{ userData.first_name }} {{ userData.last_name }}</h2>
+                        <h3>{{ userData.user_role }}</h3>
+                        <div class="social-links mt-2">
+                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content pt-2">
+
+                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <h5 class="card-title">About</h5>
+                                <p class="small fst-italic">{{ userData.about_user }}</p>
+
+                                <h5 class="card-title">Profile Details</h5>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.first_name }} {{ userData.last_name }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Gender</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.gender }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Dob</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.dob }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Country</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.country }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Address</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.city }}, {{ userData.dist }}, {{ userData.state }}, {{ userData.pincode }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Phone</div>
+                                    <div class="col-lg-9 col-md-8">(+91) {{ userData.mobile }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.email }}</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Username</div>
+                                    <div class="col-lg-9 col-md-8">{{ userData.username }}</div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                                <!-- Profile Edit Form -->
+                                <form method="POST" enctype="multipart/form-data" novalidate>
+                                    {% csrf_token %}
+                                    <div class="row mb-3">
+                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <img src="{{ userData.profile_img.url }}" alt="Profile">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.first_name}}
+                                            {{profileForm.first_name.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="lastName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.last_name}}
+                                            {{profileForm.last_name.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.about_user}}
+                                            {{profileForm.about_user.errors}}
+                                        </div>
+                                    </div>                                 
+
+                                    <div class="row mb-3">
+                                        <label for="Dob" class="col-md-4 col-lg-3 col-form-label">Dob</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.dob}}
+                                            {{profileForm.dob.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Mobile" class="col-md-4 col-lg-3 col-form-label">Mobile</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.mobile}}
+                                            {{profileForm.mobile.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Gender" class="col-md-4 col-lg-3 col-form-label">Gender</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.gender}}
+                                            {{profileForm.gender.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="ProfileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.profile_img}}
+                                            {{profileForm.profile_img.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Pincode" class="col-md-4 col-lg-3 col-form-label">Pincode</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.pincode}}
+                                            {{profileForm.pincode.errors}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="City" class="col-md-4 col-lg-3 col-form-label">City</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.city}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="District" class="col-md-4 col-lg-3 col-form-label">District</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.dist}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="state" class="col-md-4 col-lg-3 col-form-label">State</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.state}}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            {{profileForm.country}}
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form><!-- End Profile Edit Form -->
+
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function() {
+            // Get address using postal api
+            $('#pincode').blur(function () {
+                $.ajax({
+                    url : '/getAddress/',
+                    type : 'POST',
+                    data: {
+                        'pincode':$('#pincode').val(), 
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success:function(data){
+                        let parseData = JSON.parse(data)
+                        if(parseData.Status == 'Success'){
+                            for(let i = 0; i<parseData.PostOffice.length; i++){
+                                let city = parseData.PostOffice[i]['Name']
+                                let opt = `<option>${city}</option>`
+                                $('#city').append(opt)
+                            }
+
+                            let dist = parseData.PostOffice[0]['District']
+                            let state = parseData.PostOffice[0]['State']
+                            let country = parseData.PostOffice[0]['Country']
+                            $('#dist').val(dist)
+                            $('#state').val(state)
+                            $('#country').val(country)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock javascript %}

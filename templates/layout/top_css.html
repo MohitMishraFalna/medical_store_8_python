@@ -1,0 +1,69 @@
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+    <title>{% block title %} {% endblock %}</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+  
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"> -->
+  
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet"> -->
+    <!-- <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet"> -->
+    <!-- <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet"> -->
+    <!-- <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+  
+    <!-- Template Main CSS File -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/toastr.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/invoice.css' %}" rel="stylesheet">
+    <style>
+      .img-box{
+        height: 50px;
+        width: 50px;
+        border: 2px solid white;
+        box-shadow: 0px 1px 10px 1px #a4b2cd;
+      }
+
+      .remove-btn-css{
+        border: 0;
+        padding: 0;
+        background: none;
+      }
+      
+      /* Message setting */
+      .text-error{
+        color: red;
+      }
+      
+      .alert-error{
+          background-color: #f8d7da;
+          border-color: #f5c2c7;;
+      }
+
+      /* Horzontal scrollbar */
+      .horzontal-scroll{
+        overflow: auto;
+        white-space: nowrap;
+      }
+
+      .header-label{
+        font-weight: 600;
+        color: rgba(1, 41, 112, 0.6);
+        margin-right: 10px;
+      }
+    </style>
+  
+  </head>
+  

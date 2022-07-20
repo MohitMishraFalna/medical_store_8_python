@@ -1,0 +1,257 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} New Doctor {% endblock title %}
+{% block sub_title %} New Doctor {% endblock sub_title %}
+{% block content %}
+
+  <!-- Add doctor -->
+  <div class="card mb-3">
+    <!-- Add doctor -->
+    <div class="card-body">
+      <div class="pt-4 pb-2">
+        <h5 class="card-title text-center pb-0 fs-4">Add New Doctor</h5>
+        <p class="text-center small">Enter doctor details to create new</p>
+      </div>
+
+      <form class="row g-3 " action="" method="POST" novalidate>
+        <!-- <form class="row g-3 needs-validation" novalidate method="POST" action=""> -->
+          {% csrf_token %}
+          <div class="col-3">
+            <label for="yourName" class="form-label">Name</label>
+            {{ add_form.name }}
+            <div class="invalid-feedback">Please, enter your name!</div>
+            {{ add_form.name.errors}}
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Email</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">@</span>
+              {{ add_form.email }}
+              <div class="invalid-feedback">Please choose a email.</div>
+              {{ add_form.email.errors }}
+            </div>
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Mobile</label>
+            <div class="input-group has-validation">
+              {{ add_form.mobile }}
+              <div class="invalid-feedback">Please choose a role.</div>
+              {{ add_form.mobile.errors }}
+            </div>
+          </div>
+
+          <div class="col-3">
+            <label for="yourEmail" class="form-label">Department</label>
+            <div class="input-group has-validation">
+              {{ add_form.department }}
+              <div class="invalid-feedback">Please choose a department.</div>
+              {{ add_form.department.errors }}
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">Create Doctor</button>
+          </div>
+        </form>
+
+    </div>
+  </div><!-- Add doctor -->
+      
+  <!-- doctor List -->
+  <div class="col-12" id="all-doctor">
+    <div class="card top-selling">
+      <div class="card-body pb-0">
+
+        <h5 class="card-title">All Doctor
+          <div class="input-group has-validation">
+            <input type="text" name="search_Item" class="" id="search_Item" placeholder="Search you want">
+            <span class="input-group-text" id="inputGroupPrepend"> <i class="bi bi-search"></i></span>
+          </div>
+        </h5>
+        <div class="filter">
+          <label style="margin-right: 15px;">
+            <!-- Per page entry -->
+            <form method="get" id="frmPerPage">
+              <select class="dataTable-selector" id="dataTableSelector" name="selectPerPage">
+                <option>Click</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+              </select> {{perPage}} entries per page
+            </form>
+          </label>
+        </div>
+
+        <div class="horzontal-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Department</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id='searchData'>
+              {% if doctors %}
+                {% for doctor in doctors %}
+                  <tr>
+                    <td scope="row"><b>{{ doctor.id }}</b></td>
+                    <td>{{ doctor.name }}</td>
+                    <td>{{ doctor.email }}</td>
+                    <td>{{ doctor.mobile }}</td>
+                    <td>{{ doctor.department }}</td>
+                    {% if doctor.deleted_at == True %}
+                      <td><span class="badge bg-success">Active</span></td>                            
+                    {% else %}
+                      <td><span class="badge bg-danger">Deactivate</span></td>                                                        
+                    {% endif %}
+                    
+                    <td>
+                      <a class="badge bg-warning edit" id="{{ doctor.id }}"><i class="bi bi-pen"></i></a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>          
+        <!-- Disabled and active states and Pagination -->
+        <nav aria-label="...">
+          <!-- Pagination logic -->
+          <ul class="pagination">
+            {% if doctors.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="/doctor/new_doctor/?page={{ doctors.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+              </li>
+            {% endif %}
+            
+            {% for n in totalPageList %}
+              <li class="page-item"><a class="page-link" href="/doctor/new_doctor/?page={{n}}">{{n}}</a></li>
+            {% endfor %}
+
+            {% if doctors.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="/doctor/new_doctor/?page={{ doctors.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="/doctor/new_doctor/?page={{ totalPages }}">Last</a>
+              </li>
+            {% endif %}
+
+          </ul>
+        </nav><!-- End Disabled and active states -->
+      </div>    
+    </div>
+  </div><!-- End doctor List -->
+
+  <!-- Modal for edit doctor -->
+  <div class="modal fade" id="verticalycentered" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"> Edit Form
+            <span>
+              <a data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete Deparment" class="btn btn-sm btn-danger" id="delete"><i class="bi bi-trash"></i></a>
+            </span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="row g-3" action="{% url 'edit_doctor' %}" method="POST">
+            {% csrf_token %}
+            <div class="col-md-12" id="editForm">
+
+            </div>            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>    
+          </form><!-- End No Labels Form -->
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- End Modal for edit doctor -->
+
+{% endblock content %}
+{% block javascript %}
+<script>
+  // all jquery working
+  $(document).ready(function() {
+    // auto form submit
+    $('#dataTableSelector').change(()=>{
+      $('#frmPerPage').submit();
+    })
+
+    // Edit doctor Modal 
+    $(document).on('click', '.edit', function() {
+      // Get data and receive django forms as response
+      $.ajax({
+        url: '/doctor/get_doctor_Data/',
+        type: 'GET',
+        data : {'doc_id': $(this).attr('id')},
+        success:(data)=>{
+          if(data){
+            console.log(data);
+            // open modal
+            $('#verticalycentered').modal('show'); 
+            
+            // Django forms get using ajax
+            $('#editForm').html(data)
+          }
+        }
+      })
+      
+      // Assign href with id in delete anchor tag      
+      $('#delete').attr('href', "/doctor/delete/?d_id=" + $(this).attr('id')) 
+    })
+
+    // Warning before delete item
+    $('#delete').click(function() {
+      confirm('Are you sure delete item? ')
+    })
+
+    // Search from database.
+    $('#search_Item').keyup(()=>{
+      $.ajax({
+        type:"GET",
+        url:'/doctor/doctor_search',
+        data:{'search_Item':$('#search_Item').val()},
+        success:(data)=>{
+          if (data) {
+            let result = JSON.parse(data)
+            $('#searchData').html('')
+            
+            for(let i = 0; i<result.response.length; i++){
+              let srcData = `<tr><td scope="row"><b> ${result.response[i].id}</b></td>
+                <td scope="row">${result.response[i].name}</td>
+                ${(result.response[i].deleted_at == 1) ?
+                  '<td><span class="badge bg-success">Active</span></td>' : 
+                  '<td><span class="badge bg-danger">Deactivate</span></td>'
+                }
+                
+                <td><a class="badge bg-warning edit" id="${result.response[i].id}"><i class="bi bi-pen"></i></a></td></tr>`
+              $('#searchData').append(srcData)
+            }
+          }else{
+            // for success - green box
+            toastr.error('No data found', 'Data not found');
+          }
+        }
+      })
+    })
+    
+  })
+</script>
+{% endblock javascript %}
+

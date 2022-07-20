@@ -1,0 +1,562 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} New Bill {% endblock title %}
+{% block sub_title %} New Bill {% endblock sub_title %}
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="pt-4 pb-2">
+            <h5 class="card-title text-center pb-0 fs-4">Create New Bill</h5>
+            <p class="text-center small">First enter customer details.</p>
+        </div>
+
+        <form class="row g-3" novalidate action="" method="POST">
+            {% csrf_token %}
+            <!-- Customer details -->
+            <fieldset class="border p-2 col-sm-4 needs-validation">
+                <div class="row mb-3">
+                    <label for="inputName" class="col-sm-4 col-form-label">Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" list="customerList" name="customerList" class="form-control" id="customerExists">
+                        <datalist id="customerList">
+                            <!-- Here append some data from ajax's call -->
+                        </datalist>
+                        <input type="hidden" name="cust_id", id="cust_id">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="mobile" class="col-sm-4 col-form-label">Mobile</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" name="mobile" id="mobile">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputDoctor" class="col-sm-4 col-form-label">Dr. Name</label>
+                    <div class="col-sm-8">
+                        <input type="text"  aria-label="Doctor Name" list="doctorList" name="doctorList" class="form-control" id="doctorExists">
+                        <datalist id="doctorList">
+                            <!-- Here append some data from ajax's call -->
+                        </datalist>
+                        <input type="hidden" name="doc_id", id="doc_id">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Bill amount, GST and Total payable amt  -->
+            <fieldset class="border p-2 col-sm-4 needs-validation">
+                <div class="row mb-3">
+                    <label for="amount" class="col-sm-4 col-form-label">Amount</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="amount"  name="amount" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="gst" class="col-sm-4 col-form-label">GST</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" id="gst" name="gst" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="total_amt" class="col-sm-4 col-form-label">Total Amt</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="total_amt" name="total_amt" readonly>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <!-- Customer due -->
+            <fieldset class="border p-2 col-sm-4 needs-validation">
+                <div class="row mb-3">
+                    <label for="due_amt" class="col-sm-4 col-form-label">Due Amt</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="due_amt" id="due_amt" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="payable" class="col-sm-4 col-form-label">Payable</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="payable" name="payable" readonly>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="paid_amt" class="col-sm-4 col-form-label">Paid Amt</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="paid_amt" name="paid_amt">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Table for customer medicines -->
+            <div class="col-12">
+                <input type="text" name="productList" list="productList" class="form-control" id="productSearch" required
+                placeholder="Search Medicines">
+                <datalist id="productList">
+
+                </datalist>
+                <input type="hidden" name="prod_id" id="prod_id">
+                <input type="hidden" name="prod_qty" id="prod_qty">
+                <div class="horzontal-scroll" style="display: none;">
+                    <table class="table" id="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Code</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Expiry</th>
+                            <th scope="col">Mfg</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody id='invoice'>
+
+                        </tbody>
+                        <br>
+                        <tfoot>
+                            <tr><th>Bill Amount :</th>   <td id="bill_amt"> </td></tr>
+                            <tr><th>GST Amount :</th>   <td id="gst_amt"> </td></tr>
+                            <tr><th>Total Amount :</th>   <td id="total_bill_amt"> </td></tr>
+                        </tfoot>
+                    </table>
+                </div> 
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary w-100" type="submit" id="btn_submit">Payment</button>
+            </div>
+        </form>
+        <!-- Id set for order data get. -->
+        {% if my_order_id %}
+            <input type="hidden" name="my_order_id" id="my_order_id" value="{{my_order_id}}">
+        {% endif %}
+    </div>
+</div>
+<!-- Modal for invoice print -->
+<div class="modal fade" id="ExtralargeModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Customer Invoice</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Order and customer details -->
+          <div id="invoice">
+
+            <div class="toolbar hidden-print">
+                <div class="text-right">
+                    <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
+                    <button class="btn btn-info"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
+                </div>
+                <hr>
+            </div>
+            <div class="invoice overflow-auto">
+                <div style="min-width: 600px">
+                    <header>
+                        <div class="row">
+                            <div class="col">
+                              <img src="{% static 'assets/img/logo.png' %}" data-holder-rendered="true" />                                            
+                            </div>
+                            <div class="col company-details">
+                                <h2 class="name">
+                                  Mohit Mishra
+                                </h2>
+                                <div>455 Foggy Heights, AZ 85004, US</div>
+                                <div>8690716407</div>
+                                <div>mohitmishra.falna850@gmail.com</div>
+                            </div>
+                        </div>
+                    </header>
+                    <main>
+                        <div class="row contacts">
+                            <div class="col invoice-to">
+                                <div class="text-gray-light">INVOICE TO:</div>
+                                <h2 class="customerName"></h2>
+                                <div><span class="text-gray-light header-label">Mobile:</span><span class="mobileNo"></span></div>
+                                <div><span class="text-gray-light header-label">Doctor:</span><span class="doctor"></span></div>
+                                <div><span class="text-gray-light header-label">Department:</span><span class="department"></span></div>
+                            </div>
+                            <div class="col invoice-details">
+                                <h1 class="invoice-id"></h1>
+                                <div class="date order_date"></div>
+                                <div class="text-danger">ALL AMOUNT IN INDIAN CURRENCY</div>
+                            </div>
+                        </div>
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th class="text-left">Product Name</th>
+                                  <th class="text-right">Price</th>
+                                  <th class="text-right">Quantity</th>
+                                  <th class="text-right">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dynamic_data">
+                               
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">SUBTOTAL</td>
+                                  <i class="bi bi-currency-inr"><td class="bill_amt"></td></i>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">TAX 18%</td>
+                                  <td class="bill_gst"></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">INVOICE TOTAL</td>
+                                  <td class="bill_total"></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">OLD DUE</td>
+                                  <td class="due_amt1"></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">GRAND TOTAL</td>
+                                  <td class="payable_amt1"></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"></td>
+                                  <td colspan="2">PAID</td>
+                                  <td class="paid_amt1"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="thanks">Thank you!</div>
+                        <div class="notices">
+                            <div>REQUEST:</div>
+                            <div class="notice">If you feel good for purchasing with us so please visite again.</div>
+                        </div>
+                    </main>
+                    <footer>
+                        Invoice was created on a computer and is valid without the signature and seal.
+                    </footer>
+                </div>
+                <div></div>
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal for invoice print -->
+<!-- Payment gateway -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ api_key }}", // Enter the Key ID generated from the Dashboard
+        "amount": "{{ amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Medical Store",
+        "image": "{% static 'assets/img/logo.png' %}",
+        "order_id": '{{ razorpay_order_id }}', //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            payment_data = {                
+                            'my_order_id'       : $('#my_order_id').val(),
+                            'payment_id'        : response.razorpay_payment_id,
+                            'payment_order_id'  : response.razorpay_order_id,
+                            'payment_signature' : response.razorpay_signature
+                        }
+            $.ajax({
+                type: 'GET',
+                url: '/seller/save_payemnt_status/',
+                data:payment_data,
+                success:function(data){
+                    toastr.success('success', 'Payment have done.');
+                    // print bill
+                    let result = JSON.parse(data)
+                    $('.customerName').text(result.response[0].name)
+                    $('.mobileNo').text(result.response[0].mobile)
+                    $('.doctor').text(result.response[0].doctor)
+                    $('.department').text(result.response[0].department)
+                    $('.invoice-id').text('INVOICE 1995 -' + result.response[0].id)
+                    $('.order_date').text(result.response[0].order_date)
+                    $('.bill_amt').text(result.response[0].bill_amt)
+                    $('.bill_gst').text(result.response[0].gst)
+                    $('.bill_total').text(result.response[0].total_amt)
+                    $('.due_amt1').text(result.response[0].due_amt)
+                    $('.payable_amt1').text(result.response[0].payable_amt)
+                    $('.paid_amt1').text(result.response[0].paid_amt)
+
+                    if (result.response) {
+                        $('#orderProduct').html('')
+                        // create Bill here.
+                        let count = 1
+                        for(let i = 0; i<result.response.length; i++){
+                            let srcData = '<tr>'
+                            srcData = srcData + '<td class="no">'+ count + '</td>'
+                            srcData = srcData + '<td class="text-left">'+ result.response[i].prod_name + '</td>'
+                            srcData = srcData + '<td class="unit">'+ result.response[i].prod_amt + '</td>'
+                            srcData = srcData + '<td class="qty">'+ result.response[i].qty + '</td>'
+                            srcData = srcData + '<td class="total">'+ ( result.response[i].prod_amt * result.response[i].qty ) + '</td>'
+                            srcData = srcData + '</tr>'
+                            count++
+                            $('#dynamic_data').append(srcData)
+                        }
+                    }
+                    // open modal
+                    $('#ExtralargeModal').modal('show');
+                }
+            })
+        },
+        "prefill": {
+            "name": "Mohit Mishra",
+            "email": "mohitmishra.falna850@gmail.com",
+            "contact": "8690716407"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+
+            payment_data = {                
+                            'my_order_id'       : $('#my_order_id').val(),
+                            'error_code'        : response.error.code,
+                            'error_description' : response.error.description,
+                            'error_source'      : response.error.source,
+                            'error_step'        : response.error.step,
+                            'error_reason'      : response.error.reason,
+                            'error_order_id'    : response.error.metadata.order_id,
+                            'error_payment_id'  : response.error.metadata.payment_id,
+                        }
+            $.ajax({
+                type: 'GET',
+                url: '/seller/save_payemnt_status/',
+                data:payment_data,
+                success:function(data){
+                    toastr.success('error', 'Payment Failed.');
+                    window.location.href="/seller/workbench/"
+                }
+            })
+    });
+    window.onload = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    $(document).ready(()=>{
+        // User exists
+        $('#customerExists').keyup(()=>{
+            if($('#customerExists').val().length > 1){
+                $.ajax({
+                    url : '/seller/customer_exists/',
+                    type: 'GET',
+                    data:{'search_Item':$('#customerExists').val()},
+                    success:function(data){
+                        if(data){
+                            result = JSON.parse(data)
+                            $('#customerList').html('')
+                            if(result.response.length > 0){
+                                for(let i=0; i<result.response.length; i++){
+                                    opt = `<option>${result.response[i].name}</option>`
+                                    $('#customerList').append(opt)
+                                    $('#mobile').val(result.response[i].mobile)
+                                    $('#cust_id').val(result.response[i].id)
+                                    $('#due_amt').val(result.response[i].due_amt)
+                                }
+                            }
+                        }else{
+                            $('#due_amt').val(0)
+                        }      
+                    }
+                })
+            }
+        })
+
+        // Doctor exists
+        $('#doctorExists').keyup(function(){
+            if($('#doctorExists').val().length >= 1){
+                $.ajax({
+                    url : '/seller/doctor_exists/',
+                    type: 'GET',
+                    data:{'search_Item':$('#doctorExists').val()},
+                }).done(function(data){
+                        result = JSON.parse(data)
+                        $('#doctorList').html('')
+                        if(result.response.length > 0){
+                            for(let i=0; i<result.response.length; i++){
+                                opt = '<option>' + result.response[i].name + '</option>'
+                                $('#doctorList').append(opt)
+                                $('#doc_id').val(result.response[i].id)
+                            }
+                        }
+                    });
+            }
+        })
+    
+        // Product search
+        $('#productSearch').keyup(()=>{
+            $.ajax({
+                url : '/seller/product_list/',
+                type: 'GET',
+                data:{'search_Item':$('#prod_id').val()},
+                success:function(data){
+                    result = JSON.parse(data)
+                    $('#productList').html('')
+                    if(result.response.length > 0){
+                        for(let i=0; i<result.response.length; i++){
+                            opt = `<option>${result.response[i].name}</option>`
+                            $('#productList').append(opt)
+                        }
+                    }                  
+                }
+            })
+        })
+
+        // Create table
+        let count = 0
+        $('#productSearch').change(function(){
+            $.ajax({
+                url : '/seller/product_list/',
+                type: 'GET',
+                data:{'search_Item':$('#productSearch').val()},
+                success:function(data){
+                    result = JSON.parse(data)
+                    $('#productSearch').val('')
+                    $('#productList').html('')
+
+                    if(result.response.length > 0){
+                        $('.horzontal-scroll').css('display','block')
+                        
+                        for(let i=0; i<result.response.length; i++){
+                            let opt = '<tr id="tr'+result.response[i].id +'">\
+                                    <td>' + ++count + '</td>\
+                                    <td>' + result.response[i].id + '</td>\
+                                    <td>' + result.response[i].name + '</td>\
+                                    <td>' + result.response[i].expiry + '</td>\
+                                    <td>' + result.response[i].manufacturing + '</td>\
+                                    <td>' + result.response[i].department + '</td>\
+                                    <td class="price">' + result.response[i].amt + '</td>\
+                                    <td contenteditable="true" class="qty"></td>\
+                                    <td class="price-qty"></td>\
+                                    <td>\
+                                        <button class="btn btn-danger btn-sm remove-btn" id="'+result.response[i].id +'">-</button>\
+                                    </td>\
+                                </tr>'
+                            $('#invoice').append(opt)
+                        }
+                    }                  
+                }
+            })
+        })
+
+        // Product Id and Qty insert in hidden input
+        $('#btn_submit').on('click', function(e){
+            // e.preventDefault()
+            
+            let prod_id = []
+            let prod_qty = []
+            let table = $('#table tbody tr')
+
+            $(table).each(function (index, value) {
+                prod_id.push($(value).find('td')[1].textContent);
+                prod_qty.push($(value).find('td')[7].textContent)
+            })
+
+            $('#prod_id').val(prod_id)
+            $('#prod_qty').val(prod_qty)
+        })
+
+        // Calculate total amount of the bill.
+        let sum = 0;
+        $(document).on('keyup', '.qty', function(e){
+            // if key code is doesn't match so action will not perform
+            if(e.keyCode != 9 && e.keyCode == 13){
+                // get value from current td
+                let qty = $(this).text();
+                
+                // get value from current td's previous td
+                let price = $(this).prev('td').text();
+
+                // set focus when enter press
+                $('#productSearch').focus()
+
+                // insert value into current td's next td
+                $(this).next('td').html(parseInt(qty) * parseFloat(price))
+
+                // calculate the bill amount
+                if(!sum){ sum = 0 }
+                sum = parseFloat(sum) + parseFloat($(this).next('td').text());
+                
+                $('#bill_amt').html(sum)
+                $('#amount').val(sum)
+
+                // calculate the gst amount
+                gst = parseFloat($('#bill_amt').text()) * 18 / 100
+                $('#gst_amt').html(gst);
+                $('#gst').val(gst);
+
+                // total amount
+                $('#total_bill_amt').html(sum + gst)
+                $('#total_amt').val(sum + gst)
+
+                // payable amount
+                let due_amt = $('#due_amt').val();
+                if(due_amt){
+                    totalAmt = (sum + gst) + parseFloat(due_amt)
+                }else{
+                    $('#due_amt').val(0)
+                    totalAmt = (sum + gst)
+                }
+                
+                $('#payable').val(totalAmt) 
+            }
+           
+        })
+        
+        // Delete row
+        $(document).on('click', '.remove-btn', function(e){
+            e.preventDefault() 
+
+            // calculate the bill amount
+            sum = parseFloat(sum) - parseFloat($(this).parent('td').prev('td').text());
+            $('#bill_amt').html(sum)
+            $('#amount').val(sum)
+
+            // calculate the gst amount
+            gst = parseFloat($('#bill_amt').text()) * 18 / 100
+            $('#gst_amt').html(gst);
+            $('#gst').val(gst);
+
+            // total amount
+            $('#total_bill_amt').html(sum + gst)
+            $('#total_amt').val(sum + gst)
+
+            // payable amount
+            let due_amt = $('#due_amt').val();
+            totalAmt = sum + gst + parseFloat(due_amt)
+            
+            $('#payable').val(totalAmt)
+            $('#' + $(this).parents('tr').attr('id')).remove();
+
+        })
+    })
+</script>
+{% endblock javascript %}

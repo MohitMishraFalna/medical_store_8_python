@@ -1,0 +1,75 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %} New Product {% endblock title %}
+{% block sub_title %} New Product {% endblock sub_title %}
+{% block content %}
+
+  <!-- Add product -->
+  <div class="card mb-3">
+    <!-- Add product -->
+    <div class="card-body">
+      <div class="pt-4 pb-2">
+        <h5 class="card-title text-center pb-0 fs-4">Add New Product</h5>
+        <p class="text-center small">Enter product details to create new</p>
+      </div>
+
+      <form class="row g-3 " action="/owner/product_update/" method="POST" novalidate>
+        <!-- <form class="row g-3 needs-validation" novalidate method="POST" action=""> -->
+          {% csrf_token %}
+          <div class="col-4">
+            <label for="yourName" class="form-label">Name</label>
+            {{ edit_form.name }}
+            <div class="invalid-feedback">Please, enter your name!</div>
+            {{ edit_form.name.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="youramount" class="form-label">Amount</label>
+            {{ edit_form.amt }}
+            <div class="invalid-feedback">Please, enter your amount!</div>
+            {{ edit_form.amt.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="yourQty" class="form-label">Qty</label>
+            {{ edit_form.quantity }}
+            <div class="invalid-feedback">Please, enter your Qty!</div>
+            {{ edit_form.quantity.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="yourproduct_mfg" class="form-label">Product Mfg</label>
+            <div class="input-group has-validation">
+              {{ edit_form.manufacturing }}
+              <div class="invalid-feedback">Please choose a Manufacturing.</div>
+              {{ edit_form.manufacturing.errors }}
+            </div>
+          </div>
+
+          <div class="col-4">
+            <label for="yourproduct_exp" class="form-label">Product Exp</label>
+            <div class="input-group has-validation">
+              {{ edit_form.expiry }}
+              <div class="invalid-feedback">Please choose a expiry.</div>
+              {{ edit_form.expiry.errors }}
+            </div>
+          </div>
+
+          <div class="col-4">
+            <label for="yourEmail" class="form-label">Department</label>
+            <div class="input-group has-validation">
+              {{ edit_form.department }}
+              <div class="invalid-feedback">Please choose a department.</div>
+              {{ edit_form.department.errors }}
+            </div>
+          </div>
+          {{ edit_form.pro_id}}
+          <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">Create product</button>
+          </div>
+        </form>
+
+    </div>
+  </div><!-- Add product -->
+{% endblock content %}
+      

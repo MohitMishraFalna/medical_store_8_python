@@ -1,0 +1,51 @@
+{% extends 'layout/base.html'%}
+{% load static %}
+{% block title %} User Register {% endblock title %}
+{% block sub_title %}Register Form {% endblock sub_title %}
+{% block content %}
+  <div class="card mb-3">
+
+      <div class="card-body">
+
+        <div class="pt-4 pb-2">
+          <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+          <p class="text-center small">Enter user personal details to create account</p>
+        </div>
+
+        <form class="row g-3 " action="" method="POST" novalidate>
+        <!-- <form class="row g-3 needs-validation" novalidate method="POST" action=""> -->
+          {% csrf_token %}
+          <div class="col-4">
+            <label for="yourName" class="form-label">Name</label>
+            {{ register_form.first_name }}
+            <div class="invalid-feedback">Please, enter your name!</div>
+            {{ register_form.first_name.errors}}
+          </div>
+
+          <div class="col-4">
+            <label for="yourEmail" class="form-label">Email</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">@</span>
+              {{ register_form.email }}
+              <div class="invalid-feedback">Please choose a email.</div>
+              {{ register_form.email.errors }}
+            </div>
+          </div>
+
+          <div class="col-4">
+            <label for="yourEmail" class="form-label">Role</label>
+            <div class="input-group has-validation">
+              {{ register_form.user_role }}
+              <div class="invalid-feedback">Please choose a role.</div>
+              {{ register_form.user_role.errors }}
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">Create Account</button>
+          </div>
+        </form>
+
+      </div>
+  </div>
+{% endblock content %}
