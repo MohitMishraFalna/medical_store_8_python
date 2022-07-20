@@ -148,9 +148,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configuration for email
 EMAIL_HOST = 'smtp.mail.yahoo.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mohitmishra.falna850@yahoo.com'
-EMAIL_HOST_PASSWORD = 'dovqmfhsninyujky'
+# EMAIL_HOST_USER = 
+# EMAIL_HOST_PASSWORD = 
 EMAIL_USE_TLS = True
 
-RAZORPAY_API_KEY = 'rzp_test_nNrwrp9ONi4qww'
-RAZORPAY_SECRET_KEY = 'AgIP5yytluckxTz66EGkdVqp'
+# RAZORPAY_API_KEY = 
+# RAZORPAY_SECRET_KEY = 
